@@ -84,16 +84,9 @@ function showRewards(rewards) {
 function showProducts(items) {
   const products = Array.isArray(items) ? items.slice(0,3).filter(item => item && typeof item.name === 'string' && item.name.trim()) : [];
   if (!products.length) return false;
-  const group = document.createElement('section');
-  group.className = 'product-results';
-  group.setAttribute('aria-label', products.some(item => item.kind === 'reward') ? 'Prêmios para resgatar' : 'Produtos encontrados');
-  const rail = document.createElement('div');
-  rail.className = 'product-rail' + (products.length === 1 ? ' is-single' : '');
-  rail.tabIndex = 0;
-  rail.setAttribute('aria-label', products.length > 1 ? 'Carrossel: use as setas do teclado ou deslize para ver os produtos' : 'Card de produto');
   const money = new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' });
   for (const item of products) {
-    const card = document.createElement('article'); card.className = 'product-card';
+    const card = document.createElement('article'); card.className = 'bubble hiro product-card';
     const photo = document.createElement('div'); photo.className = 'product-photo'; photo.textContent = 'Foto indisponível';
     try {
       const url = new URL(item.image_url);
@@ -119,17 +112,9 @@ function showProducts(items) {
     if (item.demo === true) {
       const demo = document.createElement('small'); demo.textContent = 'Prêmio de demonstração'; card.append(demo);
     }
-    rail.append(card);
+    messages.append(card);
   }
-  if (products.length > 1) {
-    rail.addEventListener('keydown', event => {
-      if (event.target !== rail || !['ArrowLeft','ArrowRight'].includes(event.key)) return;
-      event.preventDefault();
-      rail.scrollBy({ left:(rail.firstElementChild.getBoundingClientRect().width + 12) * (event.key === 'ArrowRight' ? 1 : -1), behavior:'auto' });
-    });
-    const hint = document.createElement('p'); hint.className = 'product-hint'; hint.textContent = products.length + ' opções · deslize para ver'; group.append(hint);
-  }
-  group.append(rail); messages.append(group); return true;
+  return true;
 }
 
 function lock(isPending) {

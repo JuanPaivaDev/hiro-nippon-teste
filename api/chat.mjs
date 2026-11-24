@@ -138,7 +138,7 @@ export default async function chat(req, res) {
       result = { reply: data.reply, action: data.action, rewards: data.rewards, contact: data.contact,
         personal: data.personal === true, text: typeof data.text === 'string' ? data.text : undefined,
         product_cards: Array.isArray(data.product_cards) ? data.product_cards.slice(0,3) : undefined,
-        presentation: data.presentation === 'carousel' ? 'carousel' : data.presentation === 'card' ? 'card' : undefined,
+        presentation: Array.isArray(data.product_cards) && data.product_cards.length ? 'cards' : undefined,
         demo: data.demo === true, balance_points: typeof data.balance_points === 'number' ? data.balance_points : undefined,
         contact_channel: data.contact_channel };
     }
