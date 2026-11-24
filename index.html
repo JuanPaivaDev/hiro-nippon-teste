@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Hiro IA | NIPPON-AJI</title>
+  <link rel="icon" href="/brand/nippon-user-logo.png">
+  <link rel="stylesheet" href="/chat.css">
+  <script defer src="/chat.js"></script>
+</head>
+<body>
+  <main class="phone">
+    <header class="chat-header">
+      <img src="/brand/nippon-user-logo.png" width="48" height="48" alt="">
+      <div><h1>Hiro IA</h1><p>Empório Nippon-Aji</p></div>
+      <button id="club-entry" type="button" hidden>Entrar no Clube</button>
+      <button id="reset" type="button">Reiniciar</button>
+    </header>
+    <dialog id="club-login" class="access" aria-labelledby="club-heading">
+      <h2 id="club-heading">Entrar no Clube</h2>
+      <p>Use uma conta do Clube vinculada ao seu cadastro da loja para consultar seus pedidos reais.</p>
+      <form id="club-form">
+        <label for="club-email">E-mail do Clube</label>
+        <input type="email" id="club-email" autocomplete="username" required>
+        <label for="club-password">Senha do Clube</label>
+        <input type="password" id="club-password" autocomplete="current-password" required>
+        <label for="club-cpf">CPF cadastrado <small>(opcional, para conferir o cadastro)</small></label>
+        <input type="text" id="club-cpf" inputmode="numeric" maxlength="14" autocomplete="off">
+        <button type="submit">Confirmar acesso</button>
+        <button type="button" class="secondary" id="club-close">Voltar</button>
+        <p id="club-error" role="alert"></p>
+      </form>
+    </dialog>
+    <dialog id="demo-verification" class="access" aria-labelledby="demo-verification-heading">
+      <h2 id="demo-verification-heading">Verificar conta de teste</h2>
+      <p id="demo-cpf-hint">Use o CPF fictício <strong>000.000.000-00</strong> para consultar a compra de exemplo.</p>
+      <form id="demo-verification-form">
+        <label for="demo-cpf">CPF de teste</label>
+        <input type="text" id="demo-cpf" inputmode="numeric" placeholder="000.000.000-00" maxlength="14"
+          autocomplete="off" aria-describedby="demo-cpf-hint demo-cpf-error" required>
+        <p id="demo-cpf-error" role="alert"></p>
+        <button type="submit">Confirmar CPF de teste</button>
+        <button type="button" class="secondary" id="demo-verification-close">Voltar</button>
+      </form>
+    </dialog>
+    <section id="chat" class="chat" aria-label="Conversa com o Hiro">
+      <div id="messages" class="messages" role="log" aria-live="polite"></div>
+      <div id="typing" class="typing" role="status" hidden><span></span><span></span><span></span><span class="visually-hidden">Hiro está digitando</span></div>
+      <div id="suggestions" class="suggestions" aria-label="Sugestões de mensagem">
+        <button type="button">Tem missô em estoque?</button>
+        <button type="button">Quais prêmios existem?</button>
+        <button type="button">Qual foi minha última compra?</button>
+      </div>
+      <form id="composer" class="composer">
+        <input id="message" aria-label="Mensagem" placeholder="Escreva sua mensagem" maxlength="1200" autocomplete="off" required>
+        <button type="submit">Enviar</button>
+      </form>
+      <footer id="mode-status">Simulação de atendimento da NIPPON-AJI.</footer>
+    </section>
+  </main>
+</body>
+</html>

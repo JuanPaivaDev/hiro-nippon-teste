@@ -1,0 +1,31 @@
+# Hiro IA — NIPPON-AJI
+
+Demo de conversação publicada em https://hiro-nippon-teste.vercel.app/.
+
+O código da interface, das duas funções de API, da logo e de `vercel.json` foi exportado diretamente do deployment em produção e conferido por hash. A migração para este repositório preserva o código publicado. O manifesto em `docs/deployed-source.json` registra os arquivos originais.
+
+## Estrutura
+
+- `index.html`, `chat.js`, `chat.css`: interface de conversa.
+- `api/chat.mjs`: adaptador para os workflows existentes de atendimento, transcrição e voz do n8n.
+- `api/purchase-verification.mjs`: fluxo existente de verificação de compras.
+- `brand/`: logo usada no chat.
+- `vercel.json`: configuração de funções e cabeçalhos.
+
+## Vercel
+
+Projeto existente: **hiro-nippon-teste**, na equipe **contato-4630s-projects**. A raiz de publicação é a raiz deste repositório, sem etapa de build. O runtime configurado no projeto existente é mantido.
+
+As variáveis de ambiente continuam configuradas na Vercel. `.env.example` lista apenas seus nomes; os valores não fazem parte do repositório. O funcionamento do agente também depende dos workflows e das credenciais já configurados no n8n, que não são alterados por este projeto.
+
+Para desenvolver localmente, use Node.js compatível com o runtime do projeto e a CLI da Vercel. Configure um `.env.local` a partir do exemplo e execute `vercel dev`. Não compartilhe as credenciais.
+
+## Conferência básica
+
+```sh
+node --check chat.js
+node --check api/chat.mjs
+node --check api/purchase-verification.mjs
+```
+
+O vínculo com o GitHub permite que alterações futuras da branch `main` sejam publicadas pelo projeto existente. A conexão inicial é feita depois do envio deste snapshot, preservando o deployment que já estava no ar.

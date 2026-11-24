@@ -1,0 +1,7 @@
+# Preserve the bytes of the source exported from the current deployment.
+/api/*.mjs -text
+/chat.js -text
+/chat.css -text
+/index.html -text
+/vercel.json -text
+/brand/* -text

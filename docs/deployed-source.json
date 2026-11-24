@@ -1,0 +1,41 @@
+{
+  "deployment": "dpl_J5oYHDixy3amyMcBqmUYzsy6VjpE",
+  "productionUrl": "https://hiro-nippon-teste.vercel.app/",
+  "files": [
+    {
+      "path": "api/chat.mjs",
+      "sha256": "117be3aeb050e49e9a1dba003a7b759ddba90171eebc6f298d87c26fcef8daaf",
+      "bytes": 8083
+    },
+    {
+      "path": "api/purchase-verification.mjs",
+      "sha256": "37a0e7790520841406fd2084d1f1a05639b6d5e36da2cff8c408e67517dfbde4",
+      "bytes": 6760
+    },
+    {
+      "path": "brand/nippon-user-logo.png",
+      "sha256": "273c48e6d108ef34e7306c77cac969e72ee6495d7a348b2e2235edfacf0cf156",
+      "bytes": 20971
+    },
+    {
+      "path": "chat.css",
+      "sha256": "e170e65fed6f85571ea30ea652b59ca180dce0acedb014f027c4aaaeaeb44c33",
+      "bytes": 4820
+    },
+    {
+      "path": "chat.js",
+      "sha256": "84d632363dd69ec721f8d1575fb9f20fa117f880855f3471f6cfbeec20a3b962",
+      "bytes": 13157
+    },
+    {
+      "path": "index.html",
+      "sha256": "ae400cf0ae5c195b7e2a4a0f5ddbcff24d3daa58ac32331098a6b779d896d71d",
+      "bytes": 3437
+    },
+    {
+      "path": "vercel.json",
+      "sha256": "d636e4c0f08622cec33e7f3749a0829820adc9b8276f3ce738eb519c8cbd98a4",
+      "bytes": 749
+    }
+  ]
+}
