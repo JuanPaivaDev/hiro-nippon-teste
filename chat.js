@@ -55,31 +55,12 @@ function append(role, value) {
 }
 
 function showRewards(rewards) {
-  if (!Array.isArray(rewards) || !rewards.length) return;
-  const cards = document.createElement('div');
-  cards.className = 'cards';
-  cards.setAttribute('aria-label', 'Prêmios do Clube');
-  cards.tabIndex = 0;
-  for (const item of rewards) {
-    const card = document.createElement('article');
-    card.className = 'card';
-    if (item.image) {
-      const photo = document.createElement('img');
-      photo.src = item.image;
-      photo.alt = '';
-      photo.loading = 'lazy';
-      card.append(photo);
-    }
-    const title = document.createElement('strong');
-    title.textContent = item.name;
-    const price = document.createElement('span');
-    price.textContent = format.format(item.points) + ' pontos';
-    card.append(title, price);
-    cards.append(card);
-  }
-  messages.append(cards);
+  if (!Array.isArray(rewards)) return false;
+  return showProducts(rewards.map(item => ({
+    ...item, kind: 'reward', image_url: item.image_url ?? item.image,
+    price_points: item.price_points ?? item.points,
+  })));
 }
-
 
 function showProducts(items) {
   const products = Array.isArray(items) ? items.slice(0,3).filter(item => item && typeof item.name === 'string' && item.name.trim()) : [];
