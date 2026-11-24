@@ -1,6 +1,7 @@
 # Hiro IA — NIPPON-AJI
 
 
+
 Demo de conversação publicada em https://hiro-nippon-teste.vercel.app/.
 
 O código da interface, das duas funções de API, da logo e de `vercel.json` foi exportado diretamente do deployment em produção e conferido por hash. A migração para este repositório preserva o código publicado. O manifesto em `docs/deployed-source.json` registra os arquivos originais.
