@@ -1,14 +1,33 @@
 {
   "cleanUrls": true,
-  "functions": { "api/chat.mjs": { "maxDuration": 300 }, "api/purchase-verification.mjs": { "maxDuration": 50 } },
+  "functions": {
+    "api/chat.mjs": {
+      "maxDuration": 300
+    },
+    "api/purchase-verification.mjs": {
+      "maxDuration": 50
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "no-referrer" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; connect-src 'self' https://wfbhvsapgytftiukvvxs.supabase.co; media-src 'self' blob:; img-src 'self' https://nippon-clube-hub.vercel.app https://wfbhvsapgytftiukvvxs.supabase.co; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; connect-src 'self' https://wfbhvsapgytftiukvvxs.supabase.co; media-src 'self' blob:; img-src 'self' https://mobne-cdn.s3.us-east-1.amazonaws.com https://nippon-clube-hub.vercel.app https://wfbhvsapgytftiukvvxs.supabase.co; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
+        }
       ]
     }
   ]

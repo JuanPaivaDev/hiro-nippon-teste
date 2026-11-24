@@ -111,9 +111,12 @@ export default async function chat(req, res) {
   }
   try {
     const response = await callWorkflow('atendimento', key,
-      { channel: real ? 'club_authenticated' : 'demo', sessionId, message, history }, undefined,
+      { channel: real ? 'club_authenticated' : 'demo', sessionId, message, history, supportsAudio: b.voice === true }, undefined,
       token ? { 'X-Hiro-Club-Session': token } : {});
-    const data = await response.json();
+    const raw = await response.json();
+    // Support the webhook body and pasted n8n execution envelopes.
+    const value = Array.isArray(raw) ? (raw.length === 1 ? raw[0] : null) : raw;
+    const data = value?.body && typeof value.body === 'object' ? value.body : value;
     if (!response.ok || typeof data?.reply !== 'string') throw Error('workflow_unavailable');
     let result;
     if (data.action === 'verification_required') {
@@ -132,9 +135,14 @@ export default async function chat(req, res) {
           reply: 'Para consultar seus dados, confirme sua identidade. Entre no Clube para buscar dados reais ou use a conta simulada.' };
       }
     } else {
-      result = { reply: data.reply, action: data.action, rewards: data.rewards, contact: data.contact, personal: data.personal === true };
+      result = { reply: data.reply, action: data.action, rewards: data.rewards, contact: data.contact,
+        personal: data.personal === true, text: typeof data.text === 'string' ? data.text : undefined,
+        product_cards: Array.isArray(data.product_cards) ? data.product_cards.slice(0,3) : undefined,
+        presentation: data.presentation === 'carousel' ? 'carousel' : data.presentation === 'card' ? 'card' : undefined,
+        demo: data.demo === true, balance_points: typeof data.balance_points === 'number' ? data.balance_points : undefined,
+        contact_channel: data.contact_channel };
     }
-    const voice = b.voice === true && !(real && result.personal) ? await spokenReply(key, result.reply) : undefined;
+    const voice = b.voice === true && !result.product_cards?.length && !(real && result.personal) ? await spokenReply(key, result.reply) : undefined;
     return send(200, { ...result, transcript, voice });
   } catch {
     return send(502, { error: 'O Hiro não conseguiu responder agora. Tente novamente.', transcript });

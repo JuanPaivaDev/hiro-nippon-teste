@@ -80,6 +80,58 @@ function showRewards(rewards) {
   messages.append(cards);
 }
 
+
+function showProducts(items) {
+  const products = Array.isArray(items) ? items.slice(0,3).filter(item => item && typeof item.name === 'string' && item.name.trim()) : [];
+  if (!products.length) return false;
+  const group = document.createElement('section');
+  group.className = 'product-results';
+  group.setAttribute('aria-label', products.some(item => item.kind === 'reward') ? 'Prêmios para resgatar' : 'Produtos encontrados');
+  const rail = document.createElement('div');
+  rail.className = 'product-rail' + (products.length === 1 ? ' is-single' : '');
+  rail.tabIndex = 0;
+  rail.setAttribute('aria-label', products.length > 1 ? 'Carrossel: use as setas do teclado ou deslize para ver os produtos' : 'Card de produto');
+  const money = new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' });
+  for (const item of products) {
+    const card = document.createElement('article'); card.className = 'product-card';
+    const photo = document.createElement('div'); photo.className = 'product-photo'; photo.textContent = 'Foto indisponível';
+    try {
+      const url = new URL(item.image_url);
+      if (url.protocol === 'https:' && !url.username && !url.password) {
+        const image = document.createElement('img'); image.src = url.href; image.alt = item.name;
+        image.loading = 'lazy'; image.referrerPolicy = 'no-referrer';
+        image.addEventListener('error', () => photo.replaceChildren(document.createTextNode('Foto indisponível')), { once:true });
+        photo.replaceChildren(image);
+      }
+    } catch { /* Keep the placeholder when no image is provided. */ }
+    const title = document.createElement('h2'); title.textContent = item.name;
+    const price = document.createElement('strong'); price.className = 'product-price';
+    const points = item.price_points ?? item.points;
+    const reward = item.kind === 'reward' || typeof points === 'number';
+    price.textContent = reward
+      ? typeof points === 'number' && Number.isFinite(points) && points >= 0 ? format.format(points) + ' pontos para resgatar' : 'Pontos não confirmados'
+      : item.currency === 'BRL' && typeof item.unit_price === 'number' && Number.isFinite(item.unit_price) && item.unit_price >= 0 ? money.format(item.unit_price) : 'Preço não confirmado';
+    card.append(photo, title, price);
+    if (item.available === false || item.available == null) {
+      const stock = document.createElement('span'); stock.className = 'product-availability';
+      stock.textContent = item.available === false ? 'Indisponível' : 'Disponibilidade não confirmada'; card.append(stock);
+    }
+    if (item.demo === true) {
+      const demo = document.createElement('small'); demo.textContent = 'Prêmio de demonstração'; card.append(demo);
+    }
+    rail.append(card);
+  }
+  if (products.length > 1) {
+    rail.addEventListener('keydown', event => {
+      if (event.target !== rail || !['ArrowLeft','ArrowRight'].includes(event.key)) return;
+      event.preventDefault();
+      rail.scrollBy({ left:(rail.firstElementChild.getBoundingClientRect().width + 12) * (event.key === 'ArrowRight' ? 1 : -1), behavior:'auto' });
+    });
+    const hint = document.createElement('p'); hint.className = 'product-hint'; hint.textContent = products.length + ' opções · deslize para ver'; group.append(hint);
+  }
+  group.append(rail); messages.append(group); return true;
+}
+
 function lock(isPending) {
   pending = isPending;
   typing.hidden = !isPending;
@@ -224,7 +276,9 @@ async function send(message, { retry = false, speak } = {}) {
   try {
     const voice = speak ?? chooseVoice();
     const data = await request({ message: content, history: previous, verified, voice, mode: clubToken ? 'club' : 'demo' });
-    const bubble = appendReply(data.reply, data.voice);
+    const hasProducts = Array.isArray(data.product_cards) && data.product_cards.some(item => item && typeof item.name === 'string' && item.name.trim());
+    const bubble = appendReply(hasProducts ? (data.text || 'Confira estas opções:') : data.reply, hasProducts ? null : data.voice);
+    showProducts(data.product_cards);
     if (data.action === 'purchase_verification_required') {
       purchaseStep('cpf');
     } else if (data.action === 'verification_required') {
@@ -245,7 +299,7 @@ async function send(message, { retry = false, speak } = {}) {
       contact.textContent = 'Contato da equipe';
       bubble.append(contact);
     }
-    showRewards(data.rewards);
+    if (!hasProducts) showRewards(data.rewards);
     const replyForContext = data.personal ? 'Consulta pessoal respondida no canal autorizado.' : data.reply.slice(0, 1200);
     history = [...previous, { role: 'customer', text: content }, { role: 'hiro', text: replyForContext }].slice(-12);
   } catch (error) {
